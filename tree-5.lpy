@@ -1,0 +1,62 @@
+from random import uniform as uni
+from random import randint as rint
+
+fprob = 0.2
+r1 = -25
+r2 = 25
+t1 = -25
+t2 = 25
+k = 25
+
+Axiom: SetWidth(0.5)SetColor(88,60,30)Bid(rint(7,10))
+
+derivation length: 100
+production:
+
+Bid(t):
+	for _ in range(t):
+	  nproduce [@Gcrandrot(-180,180,0,15)F(7, 0.3)randrot(-180,180,0,40)curve(5,5)F(7,0.2)@GeA(5, k)]
+  
+
+A(t, k):
+  for degree in range(0,360,360//k):
+  		nproduce SetColor(70,80,60)[\(degree + uni(-25,25)) F(1)SetColor(60,80,60)F(2) set(rint(4,6), uni(0.01,0.05))]
+
+
+set(k, width):
+  for i in range(k):
+    nproduce +(uni(20,30))F(2, width)leaf()
+  nproduce thread(rint(5,15))
+
+thread(l):
+  nproduce SetColor(60,100,60)ptDw()
+  for _ in range(l):
+    nproduce curve(5,5)F leaf()
+  
+
+
+leaf():
+  nproduce [[;randrot(-180,180,0,40)~l(uni(0.1,1))]F(uni(0.1,0.9))[;randrot(-180,180,0,40)~l(uni(0.1,1))]]
+
+fruit():
+  if uni(0,1) < fprob:
+    nproduce SetWidth(0.03)ptDw()-(uni(-15,15))F;;@O(uni(0.3,0.6))..
+  else:
+    produce
+
+ptUp():
+  produce PinpointRel(0,0,1)
+
+ptDw():
+  produce PinpointRel(0,0,-1)
+
+curve(r,p):
+  nproduce -(rint(-r,r))&(rint(-p,p))
+
+randrot(r1,r2,t1,t2):
+	produce  /(uni(r1,r2))+(uni(t1,t2))
+
+interpretation:
+
+
+endlsystem
