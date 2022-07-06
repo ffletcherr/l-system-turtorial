@@ -1,0 +1,36 @@
+import random as rnd
+from random import uniform as un
+
+
+len = 12
+leaflen = 1
+Axiom: SetColor(80, 70, 55)SetWidth((len-3)*0.04)FFA(len)
+
+
+
+derivation length: 25
+production:
+
+A(w):
+  nproduce -(un(-2,2))F(1,(w-w/4)*0.04)[SetWidth(0.05)B(w)]
+  if w > 0:
+    produce A(w-1)
+    
+B(w):
+  num = 5 #rnd.randint(1, 5)
+  for degree in range(0, 360, 360//num):
+    degree = degree + un(-30,30)
+    nproduce [/(degree)-(80 + un(-10,10) )F(1)C(w+5)]
+  if w < 2:
+	  nproduce FC(2)
+
+C(w):
+  for _ in range(w):
+    nproduce [SetColor(22, 55, 9)SetWidth(0.03)[\(15)+(25)F(leaflen)][/(75)+(25)F(leaflen)]]/(un(15,35))F(0.3)
+  
+
+
+interpretation:
+
+
+endlsystem
