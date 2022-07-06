@@ -5,6 +5,8 @@ __pycache__/
 
 # Custom
 *.lpy~
+*.png
+*.jpg
 
 # C extensions
 *.so

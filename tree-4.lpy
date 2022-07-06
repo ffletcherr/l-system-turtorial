@@ -1,0 +1,57 @@
+from random import uniform as uni
+from random import randint as rint
+
+crvA1 = 50
+crvA2 = 90
+fprob = 0.1
+
+Axiom: SetWidth(0.5) SetColor(60,60,50) curve(15,15) F(8,0.2) A(5)
+
+
+derivation length: 100
+production:
+
+
+A(t):
+  nproduce SetWidth(0.08*(t**0.5))randrot(-180,180,0,40)F(3)[upBranch(5)]
+  if t > 0 :
+    produce A(t-1)
+
+upBranch(t):
+	nproduce [upCurve(rint(3,6),rint(crvA1,crvA2),rint(3,6))]/(uni(-180,180))upCurve(rint(3,6),rint(crvA1,crvA2),rint(3,6))
+	if t > 0 :
+	  produce upBranch(t-1)
+	
+
+upCurve(k, r, a):
+	nproduce ptUp() +(r)F(uni(0.1,2))
+	for _ in range(k):
+	  nproduce -(a+uni(-5,5))F(uni(0.1,2))[randrot(-180,180,0,40) F leaf() [fruit()]]
+
+
+leaf():
+  nproduce [[;randrot(-180,180,0,40)~l]F(uni(0.1,0.9))[;randrot(-180,180,0,40)~l(uni(0.1,2))]]
+
+fruit():
+  if uni(0,1) < fprob:
+    nproduce SetWidth(0.03)ptDw()-(uni(-15,15))F;;@O(uni(0.3,0.6))..
+  else:
+    produce
+
+ptUp():
+  produce PinpointRel(0,0,1)
+
+ptDw():
+  produce PinpointRel(0,0,-1)
+
+curve(r,p):
+  nproduce -(rint(-r,r))&(rint(-p,p))
+
+randrot(r1,r2,t1,t2):
+	produce  /(uni(r1,r2))+(uni(t1,t2))
+
+
+interpretation:
+
+
+endlsystem
