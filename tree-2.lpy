@@ -1,33 +1,41 @@
-import random as rnd
-from random import uniform as un
+from random import uniform as uni
+from random import randint as rint
 
 
-len = 12
-leaflen = 1
-Axiom: SetColor(80, 70, 55)SetWidth((len-3)*0.04)FFA(len)
+len = 20
+leaflen = 1.5
+leafsize = 0.03
+bdlen1, bdlen2 = 0.5, 1.5
+bcount1, bcount2 = 6,12
+basesize = 0.04
 
+Axiom: SetColor(80, 70, 55)SetWidth((len-3)*basesize)FFA(len)
 
-
-derivation length: 25
+derivation length: 50
 production:
 
 A(w):
-  nproduce -(un(-2,2))F(1,(w-w/4)*0.04)[SetWidth(0.05)B(w)]
+  nproduce -(uni(-2,2))F(1,(w-w/4)*basesize)[SetWidth(0.05)B(w)]
   if w > 0:
     produce A(w-1)
+  else:
+    produce FC(10)
     
 B(w):
-  num = 5 #rnd.randint(1, 5)
+  num = rint(bcount1, bcount2)
   for degree in range(0, 360, 360//num):
-    degree = degree + un(-30,30)
-    nproduce [/(degree)-(80 + un(-10,10) )F(1)C(w+5)]
+    degree = degree + uni(-30,30)
+    nproduce [F(uni(1,3)) /(degree)-(80 + uni(-10,10) )F(uni(bdlen1, bdlen2))C(w+5)]
   if w < 2:
-	  nproduce FC(2)
+    for _ in range(3):
+	    nproduce  [F(3) randrot(-180,180,-45,45)C(6)] [F(3) randrot(-180,180,-45,45)C(6)]
 
 C(w):
   for _ in range(w):
-    nproduce [SetColor(22, 55, 9)SetWidth(0.03)[\(15)+(25)F(leaflen)][/(75)+(25)F(leaflen)]]/(un(15,35))F(0.3)
-  
+    nproduce [SetColor(22, 55, 9)SetWidth(0.03)[\(15)+(25)F(leaflen,leafsize)][/(75)+(25)F(leaflen,leafsize)]]/(uni(15,35))F(0.3)
+
+randrot(r1,r2,t1,t2):
+	produce  /(uni(r1,r2))+(uni(t1,t2))
 
 
 interpretation:

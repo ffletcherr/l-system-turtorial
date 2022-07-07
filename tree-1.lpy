@@ -1,31 +1,41 @@
-import random as rd
+from random import uniform as uni
+from random import randint as rint
 
-
+fprob = 0.3
 len = 10
 generation = 0
 bw = 0.6
+fisize1, fisize2 = 0.2, 0.4
+fosize1, fosize2 = 0.1, 0.2
+lisize1, lisize2 = 0.1,0.9
+losize1, losize2 = 0.25, 0.75
 
 
-module tree
-module arm, curve
-module branch, leaf
+Axiom: SetWidth(0.5) @Gc A() tree(1) @Ge
 
-Axiom: SetWidth(0.5)F(1,bw)curve(15,15)F(1.5,bw-0.1)curve(15,15)F(1,bw-0.15)curve(15,15)F(1,bw-0.2)curve(15,15)F(1,bw-0.25)curve(15,15)F(2,bw-0.32)curve(15,15)F(1,bw-0.35)curve(15,15)tree(1)
-
-derivation length: 15
+derivation length: 125
 production:
 
-
+A():
+  nproduce (
+  F(1,bw)curve(15,15)
+  F(1.5,bw-0.1)curve(15,15)
+  F(1,bw-0.15)curve(15,15)
+  F(1,bw-0.2)curve(15,15)
+  F(1,bw-0.25)curve(15,15)
+  F(2,bw-0.32)curve(15,15)
+  F(1,bw-0.35)curve(15,15)
+  )
 
 tree(t):
   nproduce (
-	  curve(15,15)F(rd.uniform(0.3,1))
+	  curve(15,15)F(uni(0.3,1))
 	  [ 
 	  		[
-		  		F(rd.uniform(0.01,0.2))-(90)arm(t)] 
-				F(rd.uniform(0.01,0.2))[+(90)arm(t)]
-				F(rd.uniform(0.01,0.2))[^(90)arm(t)]
-				F(rd.uniform(0.01,0.2))[&(90)arm(t)]
+		  		F(uni(0.01,0.2))-(90)arm(t)] 
+				F(uni(0.01,0.2))[+(90)arm(t)]
+				F(uni(0.01,0.2))[^(90)arm(t)]
+				F(uni(0.01,0.2))[&(90)arm(t)]
 		  ]
   )
   if t<len:
@@ -42,15 +52,32 @@ arm(t):
 
 
 branch(t):
-  nproduce SetWidth(min(0.3/t,0.1))+(rd.uniform(-25,25)) &(rd.uniform(-25,25)) F leaf(1) leaf(1)
+  nproduce SetWidth(min(0.3/t,0.1))+(uni(-25,25)) &(uni(-25,25)) F 
+  for _ in range(2):
+    nproduce leaf(lisize1, lisize2, losize1, losize2) [fruit(fisize1,fisize2,fosize1,fosize2)]
 
 
-leaf(t):
-  nproduce [-(rd.randint(-100,100))&(rd.randint(-100,100));~l(rd.uniform(0.25,0.75))] [SetColor(166,25,12) @O(0.08)]
+leaf(isize1, isize2, osize1, osize2):
+  nproduce [[;randrot(-180,180,0,40)~l(uni(0.1,1))]F(uni(isize1, isize2))[;randrot(-180,180,0,40)~l(uni(osize1, osize2))]]
 
+fruit(isize1, isize2, osize1, osize2):
+  if uni(0,1) < fprob:
+    nproduce SetWidth(0.01)ptDw()-(uni(-15,15))F(uni(isize1, isize2));;@O(uni(osize1, osize2))..
+  else:
+    produce
+
+
+ptUp():
+  produce PinpointRel(0,0,1)
+
+ptDw():
+  produce PinpointRel(0,0,-1)
 
 curve(r,p):
-  nproduce -(rd.randint(-r,r))&(rd.randint(-p,p))
+  nproduce -(rint(-r,r))&(rint(-p,p))
+
+randrot(r1,r2,t1,t2):
+	produce  /(uni(r1,r2))+(uni(t1,t2))
 
 interpretation:
 
