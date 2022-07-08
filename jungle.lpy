@@ -10,17 +10,88 @@ t1_fosize1, t1_fosize2 = 0.1, 0.2
 t1_lisize1, t1_lisize2 = 0.1,0.9
 t1_losize1, t1_losize2 = 0.25, 0.75
 
-t2_len = 20
+t2_len = 35
 t2_leaflen = 1.5
 t2_leafsize = 0.03
 t2_bdlen1, t2_bdlen2 = 0.5, 1.5
 t2_bcount1, t2_bcount2 = 6,12
 t2_basesize = 0.04
 
-Axiom: [tree1()]MoveTo(10,10,0)[tree2()]MoveTo(-10,-10,0)[tree3()]
+t4_crvA1 = 50
+t4_crvA2 = 90
+t4_fprob = 0.1
+t4_fisize1, t4_fisize2 = 0.1, 0.7
+t4_fosize1, t4_fosize2 = 0.3,0.6
+t4_lisize1, t4_lisize2 = 0.1,0.9
+t4_losize1, t4_losize2 = 0.1,2
 
-derivation length: 125
+t5_r1 = -25
+t5_r2 = 25
+t5_t1 = -25
+t5_t2 = 25
+t5_k = 25
+t5_lisize1, t5_lisize2 = 0.1,0.9
+t5_losize1, t5_losize2 = 0.45, 0.9
+t5_thlen1, t5_thlen2 = 17,45 
+
+step = 25
+Axiom: [tree1()]MoveTo(step,step,0)[tree2()]MoveTo(-step,-step,0)[tree3()]MoveTo(-step,step,0)[tree4()]MoveTo(step,-step,0)[tree5()]
+
+derivation length: 200
 production:
+
+###### Tree 5 ######
+
+tree5():
+  produce SetWidth(0.5)SetColor(88,60,30)Bid(rint(8,15))
+
+Bid(t):
+	for _ in range(t):
+	  nproduce [MoveRel(uni(-1,1),uni(-1,1),0) @Gc randrot(-180,180,0,15)F(15, 0.3)randrot(-180,180,0,40)curve(5,5)F(15,0.2)@Ge t5_A(5, t5_k)]
+  
+
+t5_A(t, k):
+  for degree in range(0,360,360//k):
+  		nproduce SetColor(70,80,60)[\(degree + uni(-25,25)) F(1)SetColor(60,80,60)F(2) set(rint(4,6), uni(0.01,0.05))]
+
+
+set(k, width):
+  for i in range(k):
+    nproduce +(uni(20,30))F(2, width) leaf(t5_lisize1, t5_lisize2, t5_losize1, t5_losize2)
+  nproduce thread(rint(t5_thlen1, t5_thlen2))
+
+thread(l):
+  nproduce SetColor(60,100,60)ptDw()
+  for _ in range(l):
+    nproduce curve(5,5)F leaf(t5_lisize1, t5_lisize2, t5_losize1, t5_losize2)
+
+
+###### Tree 4 ######
+
+tree4():
+  produce SetWidth(0.5) SetColor(60,60,50) curve(15,15) F(8,0.2) t4_A(5)
+
+t4_A(t):
+  nproduce SetWidth(0.08*(t**0.5))randrot(-180,180,0,40)F(3)[upBranch(5)]
+  if t > 0 :
+    produce t4_A(t-1)
+
+upBranch(t):
+	nproduce [upCurve(rint(3,6),rint(t4_crvA1,t4_crvA2),rint(3,6))]/(uni(-180,180))upCurve(rint(3,6),rint(t4_crvA1,t4_crvA2),rint(3,6))
+	if t > 0 :
+	  produce upBranch(t-1)
+	
+
+upCurve(k, r, a):
+	nproduce ptUp() +(r)F(uni(0.1,2))
+	for _ in range(k):
+	  nproduce (
+		  -(a+uni(-5,5))F(uni(0.1,2))
+		  [
+			  randrot(-180,180,0,40) F leaf(t4_lisize1, t4_lisize2, t4_losize1, t4_losize2) 
+			  [fruit(t4_fisize1, t4_fisize2, t4_fosize1, t4_fosize2, t4_fprob)]
+		  ]
+	  )
 
 
 
@@ -34,23 +105,29 @@ t3_A(t):
   if t > 0 :
     produce t3_A(t-1)
   else:
-    produce t3_C(3)
+    produce C(3)
 
 
 t3_B(t):
   nproduce SetWidth(0.2)curve(5,5)F(uni(0.1,1))
   if uni(0,1) < 0.3:
-    nproduce t3_C(2)
+    nproduce C(2)
   if t > 0 :
     produce t3_B(t-1)
   else:
-    produce t3_C(2)
+    produce C(2)
     
-t3_C(w):
+C(w):
   if w > 0:
     for _ in range(5):
-      nproduce [;randrot(-180,180,-100,2)F(uni(0.5,2),0.08)[F(uni(1,3),0.03)F(uni(1,3))]]t3_C(w-1)
+      nproduce [;randrot(-180,180,-100,2)F(uni(0.5,2),0.08)[F(uni(1,3),0.03)F(uni(1,3))]]C(w-1)
+ 
 
+curve(r,p):
+  nproduce -(rint(-r,r))&(rint(-p,p))
+
+randrot(r1,r2,t1,t2):
+	produce  /(uni(r1,r2))+(uni(t1,t2))
 
 ###### Tree 2 ######
 

@@ -4,6 +4,10 @@ from random import randint as rint
 crvA1 = 50
 crvA2 = 90
 fprob = 0.1
+fisize1, fisize2 = 0.1, 0.7
+fosize1, fosize2 = 0.3,0.6
+lisize1, lisize2 = 0.1,0.9
+losize1, losize2 = 0.1,2
 
 Axiom: SetWidth(0.5) SetColor(60,60,50) curve(15,15) F(8,0.2) A(5)
 
@@ -26,17 +30,18 @@ upBranch(t):
 upCurve(k, r, a):
 	nproduce ptUp() +(r)F(uni(0.1,2))
 	for _ in range(k):
-	  nproduce -(a+uni(-5,5))F(uni(0.1,2))[randrot(-180,180,0,40) F leaf() [fruit()]]
+	  nproduce -(a+uni(-5,5))F(uni(0.1,2))[randrot(-180,180,0,40) F leaf(lisize1, lisize2, losize1, losize2) [fruit(fisize1, fisize2, fosize1, fosize2, fprob)]]
 
 
-leaf():
-  nproduce [[;randrot(-180,180,0,40)~l]F(uni(0.1,0.9))[;randrot(-180,180,0,40)~l(uni(0.1,2))]]
+leaf(isize1, isize2, osize1, osize2):
+  nproduce [[;randrot(-180,180,0,40)~l(uni(0.1,1))]F(uni(isize1, isize2))[;randrot(-180,180,0,40)~l(uni(osize1, osize2))]]
 
-fruit():
+fruit(isize1, isize2, osize1, osize2, fprob):
   if uni(0,1) < fprob:
-    nproduce SetWidth(0.03)ptDw()-(uni(-15,15))F;;@O(uni(0.3,0.6))..
+    nproduce SetWidth(0.01)ptDw()-(uni(-15,15))F(uni(isize1, isize2));;@O(uni(osize1, osize2))..
   else:
     produce
+
 
 ptUp():
   produce PinpointRel(0,0,1)

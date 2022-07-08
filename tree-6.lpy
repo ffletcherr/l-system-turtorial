@@ -1,0 +1,67 @@
+from random import uniform as uni
+from random import randint as rint
+
+trunkCp = 0.9
+branchCp = 0.2
+branchBp = 0.3
+crownBp = 0.3
+crownDensity = 15
+baseW = 0.25
+age = 45
+crv1, crv2 = 25, 25
+Axiom: SetWidth(baseW)@GcF(5, baseW/2)tree(age)@Ge
+
+derivation length: 80
+production:
+
+
+tree(k):
+  if uni(0,1) < trunkCp:
+    nproduce F(uni(0.1, 0.5))
+  if uni(0,1) < branchBp:
+    nproduce [\(uni(-180, 180))+(uni(35, 55))F  curve(crv1, crv2) subtree(k-3)]
+  if uni(0,1) < branchBp:
+    nproduce [/(uni(-180, 180))+(uni(35, 55))F curve(crv1, crv2) subtree(k-3)]
+  if k >= 0:
+    nproduce [tree(k-1)]
+  else:
+    produce [subtree(1)]
+
+subtree(k):
+  nproduce   SetWidth(baseW/4)
+  if uni(0,1) < branchCp:
+    nproduce curve(crv1, crv2) F
+  if uni(0,1) < crownBp:
+    nproduce [\(uni(-180, 180))+(uni(35, 55))F [crown(crownDensity)]]
+  if uni(0,1) < crownBp:
+    nproduce [/(uni(-180, 180))+(uni(35, 55))F [crown(crownDensity)]]
+  if k >= 0: 
+    nproduce [subtree(k-1)]
+  else:
+    produce [crown(15)]
+
+crown(k):
+  nproduce  SetWidth(baseW/8)
+  for _ in range(k):
+    nproduce randrot(-180,180,-180,180) leaf(0.01, 0.08, 0.1, 0.5)
+
+leaf(isize1, isize2, osize1, osize2):
+  nproduce [[;randrot(-180,180,0,40)~l(uni(0.1,1))]F(uni(isize1, isize2))[;randrot(-180,180,0,40)~l(uni(osize1, osize2))]]
+
+
+ptUp():
+  produce PinpointRel(0,0,1)
+
+ptDw():
+  produce PinpointRel(0,0,-1)
+
+curve(r,p):
+  nproduce -(rint(-r,r))&(rint(-p,p))
+
+randrot(r1,r2,t1,t2):
+	produce  /(uni(r1,r2))+(uni(t1,t2))
+
+interpretation:
+
+
+endlsystem

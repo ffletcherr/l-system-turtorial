@@ -4,7 +4,7 @@ from random import randint as rint
 
 Axiom: SetWidth(0.8)F(3,0.55)F(1,0.4)A(15)
 
-derivation length: 150
+derivation length: 125
 production:
 
 A(t):
