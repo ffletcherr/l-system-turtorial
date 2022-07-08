@@ -2,11 +2,11 @@ from random import uniform as uni
 from random import randint as rint
 
 
-len = 20
-leaflen = 1.5
+len = 25
+leaflen = 1.8
 leafsize = 0.03
 bdlen1, bdlen2 = 0.5, 1.5
-bcount1, bcount2 = 6,12
+bcount1, bcount2 = 8,18
 basesize = 0.04
 
 Axiom: SetColor(80, 70, 55)SetWidth((len-3)*basesize)FFA(len)

@@ -12,7 +12,7 @@ losize1, losize2 = 0.1,2
 Axiom: SetWidth(0.5) SetColor(60,60,50) curve(15,15) F(8,0.2) A(5)
 
 
-derivation length: 100
+derivation length: 50
 production:
 
 

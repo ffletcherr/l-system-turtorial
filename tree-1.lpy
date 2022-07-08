@@ -11,12 +11,12 @@ lisize1, lisize2 = 0.1,0.9
 losize1, losize2 = 0.25, 0.75
 
 
-Axiom: SetWidth(0.5) @Gc A() tree(1) @Ge
+Axiom: SetWidth(0.5) @Gc trunk() tree(1) @Ge
 
 derivation length: 125
 production:
 
-A():
+trunk():
   nproduce (
   F(1,bw)curve(15,15)
   F(1.5,bw-0.1)curve(15,15)

@@ -2,11 +2,11 @@ from random import uniform as uni
 from random import randint as rint
 
 trunkCp = 0.9
-branchCp = 0.2
-branchBp = 0.3
-crownBp = 0.3
+branchCp = 0.3
+branchBp = 0.6
+crownBp = 0.8
 crownDensity = 15
-baseW = 0.25
+baseW = 0.5
 age = 45
 crv1, crv2 = 25, 25
 Axiom: SetWidth(baseW)@GcF(5, baseW/2)tree(age)@Ge

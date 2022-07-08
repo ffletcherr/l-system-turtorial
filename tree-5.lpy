@@ -6,16 +6,17 @@ r2 = 25
 t1 = -25
 t2 = 25
 k = 25
+lprob = 0.9
 lisize1, lisize2 = 0.1,0.9
 losize1, losize2 = 0.25, 0.75
 Axiom: SetWidth(0.5)SetColor(88,60,30)Bid(rint(7,10))
 
-derivation length: 100
+derivation length: 50
 production:
 
 Bid(t):
 	for _ in range(t):
-	  nproduce [@Gc randrot(-180,180,0,15)F(7, 0.3)randrot(-180,180,0,40)curve(5,5)F(7,0.2)@Ge A(5, k)]
+	  nproduce MoveRel(uni(-0.5,0.5),uni(-0.5,0.5),0) [@Gc  randrot(-180,180,0,15)F(7, 0.3)randrot(-180,180,0,40)curve(5,5)F(7,0.2)@Ge A(5, k)]
   
 
 A(t, k):
@@ -31,7 +32,9 @@ set(k, width):
 thread(l):
   nproduce SetColor(60,100,60)ptDw()
   for _ in range(l):
-    nproduce curve(5,5)F leaf(lisize1, lisize2, losize1, losize2)
+    nproduce curve(5,5)F 
+    if uni(0,1) < lprob:
+      nproduce leaf(lisize1, lisize2, losize1, losize2)
   
 
 
