@@ -34,11 +34,57 @@ t5_lisize1, t5_lisize2 = 0.1,0.9
 t5_losize1, t5_losize2 = 0.45, 0.9
 t5_thlen1, t5_thlen2 = 17,45 
 
+
+trunkCp = 0.9
+branchCp = 0.3
+branchBp = 0.6
+crownBp = 0.8
+crownDensity = 15
+baseW = 0.3
+age = 45
+crv1, crv2 = 25, 25
+
 step = 25
-Axiom: [tree1()]MoveTo(step,step,0)[tree2()]MoveTo(-step,-step,0)[tree3()]MoveTo(-step,step,0)[tree4()]MoveTo(step,-step,0)[tree5()]
+Axiom: [tree1()]MoveTo(step,step,0)[tree2()]MoveTo(-step,-step,0)[tree3()]MoveTo(-step,step,0)[tree4()]MoveTo(step,-step,0)[tree5()]MoveTo(-2*step,-step,0)[tree6()]MoveTo(-step,-2*step,0)[tree6()]
 
 derivation length: 200
 production:
+
+###### Tree 6 ######
+
+tree6():
+  produce SetWidth(baseW)@GcF(8, baseW/2)t6_tree(age)@Ge
+
+t6_tree(k):
+  if uni(0,1) < trunkCp:
+    nproduce F(uni(0.5, 1))
+  if uni(0,1) < branchBp:
+    nproduce [\(uni(-180, 180))+(uni(35, 55))F  curve(crv1, crv2) subtree(k-3)]
+  if uni(0,1) < branchBp:
+    nproduce [/(uni(-180, 180))+(uni(35, 55))F curve(crv1, crv2) subtree(k-3)]
+  if k >= 0:
+    nproduce [t6_tree(k-1)]
+  else:
+    produce [subtree(1)]
+
+subtree(k):
+  nproduce   SetWidth(baseW/4)
+  if uni(0,1) < branchCp:
+    nproduce curve(crv1, crv2) F
+  if uni(0,1) < crownBp:
+    nproduce [\(uni(-180, 180))+(uni(35, 55))F [crown(crownDensity)]]
+  if uni(0,1) < crownBp:
+    nproduce [/(uni(-180, 180))+(uni(35, 55))F [crown(crownDensity)]]
+  if k >= 0: 
+    nproduce [subtree(k-1)]
+  else:
+    produce [crown(15)]
+
+crown(k):
+  nproduce  SetWidth(baseW/8)
+  for _ in range(k):
+    nproduce randrot(-180,180,-180,180) leaf(0.01, 0.08, 0.1, 0.5)
+
 
 ###### Tree 5 ######
 
